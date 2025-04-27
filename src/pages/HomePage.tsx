@@ -5,6 +5,7 @@ import { FaInstagram, FaYoutube } from 'react-icons/fa';
 import { SiNaver } from "react-icons/si";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { useNavigate } from "react-router-dom";
 import 'swiper/css';
 import 'swiper/css/autoplay';
 import { Autoplay } from 'swiper/modules';
@@ -26,6 +27,19 @@ function HomePage() {
 
   const [isSearchOpen, setIsSearchOpen] = useState(false); // PC용 인라인 검색창 열림 여부
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false); // 모바일용 풀스크린 검색창 열림 여부
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchQuery.trim() !== "") {
+      navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   const handleSearchClick = () => {
     if (window.innerWidth <= 768) {
@@ -68,6 +82,7 @@ function HomePage() {
             <div className="relative hidden md:block ml-4">
               <div className={`origin-right transform transition-transform duration-300 ease-in-out ${isSearchOpen ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'} w-64`}>
                 <input type="text" placeholder="학원명을 검색해 보세요"
+                  value={searchQuery} onChange={handleInputChange} onKeyDown={handleKeyDown}
                   className="px-4 py-1.5 h-9 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pickstudyPink w-full"
                 />
               </div>
@@ -79,6 +94,7 @@ function HomePage() {
                 <div className="flex items-center p-4 border-b border-gray-200">
                   <button onClick={() => setIsMobileSearchOpen(false)} className="text-2xl text-gray-700"><MdKeyboardDoubleArrowLeft /></button>
                   <input type="text" autoFocus placeholder="학원명을 검색해 보세요"
+                    value={searchQuery} onChange={handleInputChange} onKeyDown={handleKeyDown}
                     className="ml-4 flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pickstudyPink"
                   />
                 </div>
@@ -153,7 +169,7 @@ function HomePage() {
         </motion.div>
       </section>
       {/* Service Section */}
-      <section className="w-full bg-white py-24">
+      <section className="w-full bg-white py-28">
         <div className="max-w-7xl mx-auto px-6 text-center">
           {/* 타이틀 */}
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
@@ -341,7 +357,7 @@ function HomePage() {
         </div>
       </section>
       {/* 후기 섹션 */}
-      <section className="w-full bg-gray-50 py-24">
+      <section className="w-full bg-gray-50 py-28">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
           {/* 왼쪽 후기 소개 텍스트 */}
           <div className="w-full md:w-1/2 text-center md:text-left">
@@ -438,7 +454,7 @@ function HomePage() {
 
         </div>
       </section>
-      {/* 콜투액션 섹션 */}
+      {/* 콜투액션(픽스터디) 섹션 */}
       <section className="w-full bg-cover bg-center py-40" style={{ backgroundImage: `url(${bannerImg})` }}>
         <div className="max-w-4xl mx-auto px-6 text-center text-white">
           {/* 타이틀 */}
@@ -457,24 +473,77 @@ function HomePage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-lg mb-8"
+            className="text-lg mb-12"
           >
             믿을 수 있는 학원 선택, PickStudy에서 경험하세요.
           </motion.p>
-          {/* 단일 버튼 */}
-          <motion.a
-            href="#"
+          {/* 버튼 + QR 묶음 */}
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="inline-block bg-pickstudyPink text-white font-semibold py-3 px-8 rounded-full text-lg hover:opacity-90 transition"
+            className="flex flex-col md:flex-row items-center justify-center gap-6"
           >
-            PickStudy로 가기
-          </motion.a>
+            {/* 버튼 */}
+            <a href="#"
+              className="inline-block bg-pickstudyPink text-white font-semibold py-3 px-8 rounded-full text-lg hover:opacity-90 transition"
+            >
+              PickStudy로 가기
+            </a>
+            {/* QR 코드 임시 박스 */}
+            <div className="w-24 h-24 bg-white rounded-lg flex items-center justify-center shadow-md">
+              <span className="text-gray-400 text-sm">QR CODE</span>
+            </div>
+          </motion.div>
         </div>
       </section>
-
+      {/* 콜투액션(픽스터디 아카데미) 섹션 */}
+      <section className="w-full bg-white py-24">
+        <div className="max-w-4xl mx-auto px-6 text-center text-gray-800">
+          {/* 타이틀 */}
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-4xl md:text-5xl font-bold mb-6"
+          >
+            학원 관계자이신가요?
+          </motion.h2>
+          {/* 서브텍스트 */}
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-lg mb-12 text-gray-600"
+          >
+            PickStudy Academy를 통해<br />
+            학원 관리와 운영을 더 쉽고 스마트하게 시작해보세요.
+          </motion.p>
+          {/* 버튼 + QR 묶음 */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-col md:flex-row items-center justify-center gap-6"
+          >
+            {/* 버튼 */}
+            <a
+              href="#"
+              className="inline-block bg-pickstudyPink text-white font-semibold py-3 px-8 rounded-full text-lg hover:opacity-90 transition"
+            >
+              PickStudy Academy로 가기
+            </a>
+            {/* QR 코드 임시 박스 */}
+            <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center shadow-md">
+              <span className="text-gray-500 text-sm">QR CODE</span>
+            </div>
+          </motion.div>
+        </div>
+      </section>
       {/* Footer Section */}
       <footer className="w-full bg-gray-900 py-14 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
@@ -490,8 +559,8 @@ function HomePage() {
             {/* 링크들 */}
             <div className="flex gap-6 mb-4 md:mb-0">
               <a href="#" className="hover:text-white transition">회사소개</a>
-              <a href="#" className="hover:text-white transition">이용약관</a>
-              <a href="#" className="hover:text-white transition">개인정보처리방침</a>
+              <a href="/terms" className="hover:text-white transition">이용약관</a>
+              <a href="/privacy" className="hover:text-white transition">개인정보처리방침</a>
             </div>
             {/* 소셜 아이콘 */}
             <div className="flex gap-4">
@@ -514,24 +583,22 @@ function HomePage() {
 
 export default HomePage;
 
-// FAQItem 컴포넌트
 function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="border-b pb-4">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
+      <button onClick={() => setIsOpen(!isOpen)}
         className="flex justify-between w-full text-left text-lg font-semibold text-gray-800 hover:text-pickstudyPink transition"
       >
         {question}
         <span>{isOpen ? "▲" : "▼"}</span>
       </button>
-      {isOpen && (
-        <div className="mt-2 text-gray-600 transition-all">
+      <div className={`overflow-hidden transition-all duration-500 ${isOpen ? 'max-h-40' : 'max-h-0'}`}>
+        <div className="mt-2 text-gray-600">
           {answer}
         </div>
-      )}
+      </div>
     </div>
   );
 }

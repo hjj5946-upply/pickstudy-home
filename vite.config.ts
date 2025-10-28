@@ -5,6 +5,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    open: true // ✅ 서버 실행 시 브라우저 자동 오픈
+    open: true
   }
 })
